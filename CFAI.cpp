@@ -85,7 +85,6 @@ int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _
     }
     Node *mostVisited = *(std::max_element(root->children.begin(), root->children.end(), [](Node *a, Node *b)
                                            { return a->visits < b->visits; }));
-    ;
     int bestAction = mostVisited->board.lastY;
     delete root;
     return bestAction;
