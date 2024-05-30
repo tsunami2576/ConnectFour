@@ -71,7 +71,7 @@ void CFAI::backpropagate(Node *node, int winner)
     }
 }
 
-int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _lastY, int _noX, int _noY, double time_limit = 2800)
+int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _lastY, int _noX, int _noY, double time_limit)
 {
     auto start = std::chrono::system_clock::now();
     Node *root = new Node(nullptr, _M, _N, _board, _top, _lastX, _lastY, _noX, _noY, 1);
