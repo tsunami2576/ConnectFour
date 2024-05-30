@@ -6,7 +6,7 @@
 
 CFAI::CFAI() { srand(time(0)); }
 
-double CFAI::uctValue(int totle_visits, int visits, int wins)
+double CFAI::uctValue(int totle_visits, int visits, int wins, double expPara)
 {
     if (visits == 0)
         return std::numeric_limits<double>::max();
