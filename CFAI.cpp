@@ -13,15 +13,16 @@ CFAI::CFAI()
 
 double CFAI::uctValue(int totle_visits, int visits, int wins, double expPara)
 {
-    return (double(wins) / visits) + expPara * sqrt(log(totle_visits) / visits);
+    return (double(wins) / visits) + expPara * std::sqrt(std::log(totle_visits) / visits);
 }
 
 Node *CFAI::selectChild(Node *node)
 {
-    double uct = 0, uct_curr;
+    double uct = 0.0, uct_curr;
     Node *selected;
     for (auto child : node->children)
     {
+        std::cerr << "Child status:" << child->board.status << '\n';
         double uct_curr = uctValue(node->visits, child->visits, child->wins);
         if (uct_curr > uct)
         {
