@@ -100,7 +100,6 @@ int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _
         Node *expanded = expand(root);
         int winner = simulate(expanded->board);
         backpropagate(expanded, winner);
-        i++;
     }
     Node *mostVisited = *(std::max_element(root->children.begin(), root->children.end(), [](Node *a, Node *b)
                                            { return a->wins + 1 / a->visits < b->wins / b->visits; }));
