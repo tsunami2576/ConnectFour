@@ -13,8 +13,6 @@ CFAI::CFAI()
 
 double CFAI::uctValue(int totle_visits, int visits, int wins, double expPara)
 {
-    if (visits == 0)
-        return std::numeric_limits<double>::max();
     return (double(wins) / visits) + expPara * sqrt(log(totle_visits) / visits);
 }
 
@@ -28,29 +26,19 @@ Node *CFAI::selectChild(Node *node)
 Node *CFAI::expand(Node *node)
 {
     if (node->board.terminated())
-    {
-        std::cerr << "局面结束，不拓展。\n";
         return node;
-    }
-    std::cerr << "局面未结束，开始拓展。\n";
-    for (int y : node->board.legal_action)
+    if (!(node->board.legal_action.empty()))
     {
+        auto action = node->board.legal_action.begin() + (random() % (node->board.legal_action.size()));
         Node *childNode = new Node(node, node->board.M, node->board.N, node->board.board, node->board.top, node->board.lastX,
                                    node->board.lastY, node->board.noX, node->board.noY, node->board.last_fall);
-        std::cerr << "子节点实例化。\n";
-        childNode->board.actionApply(y);
-        std::cerr << "子节点更新一步。\n";
+        childNode->board.actionApply(*action);
         childNode->board.legalAction();
-        std::cerr << "计算子节点可进行的行动。\n";
         node->children.emplace_back(childNode);
-        std::cerr << "将子节点扩展到本节点。\n";
-        if (node->children.size() >= node->board.legal_action.size())
-        {
-            std::cerr << "已扩展完毕。\n";
-            break;
-        }
+        node->board.legal_action.erase(action);
+        return childNode;
     }
-    return node->children.back();
+    return expand(selectChild(node));
 }
 
 int CFAI::simulate(Board board)
@@ -92,12 +80,9 @@ int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _
     auto start = std::chrono::system_clock::now();
     Node *root = new Node(nullptr, _M, _N, _board, _top, _lastX, _lastY, _noX, _noY, 1);
     root->board.legalAction();
-    expand(root);
     while ((std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start)).count() < time_limit)
     {
-        Node *selected = selectChild(root);
-        std::cerr << "Child selected.\n";
-        Node *expanded = expand(selected);
+        Node *expanded = expand(root);
         std::cerr << "Child expanded.\n";
         int winner = simulate(expanded->board);
         std::cerr << "Simulation finished.\n";
@@ -105,7 +90,7 @@ int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _
         std::cerr << "Backpropagate finished.\n";
     }
     Node *mostVisited = *(std::max_element(root->children.begin(), root->children.end(), [](Node *a, Node *b)
-                                           { return a->wins / a->visits < b->wins / b->visits; }));
+                                           { return a->wins + 1 / a->visits < b->wins / b->visits; }));
     int bestAction = mostVisited->board.lastY;
     delete root;
     return bestAction;
