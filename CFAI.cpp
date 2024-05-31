@@ -57,7 +57,6 @@ int CFAI::simulate(Board board)
     int size = board.legal_action.size();
     while (!board.terminated())
     {
-        std::cerr << ++cnt << ":\n";
         auto action = board.legal_action.begin() + random() % size;
         board.actionApply(*action);
         if (0 == board.top[*action])
