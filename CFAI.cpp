@@ -24,20 +24,30 @@ Node *CFAI::selectChild(Node *node)
 
 Node *CFAI::expand(Node *node)
 {
+    std::cerr << "Ex1\n";
     if (node->board.terminated())
         return node;
+    std::cerr << "Ex2\n";
     if (!(node->not_expanded.empty()))
     {
         auto action = node->not_expanded.begin() + (random() % (node->board.legal_action.size()));
+        std::cerr << "Ex3\n";
         Node *childNode = new Node(node, node->board.M, node->board.N, node->board.board, node->board.top, node->board.lastX,
                                    node->board.lastY, node->board.noX, node->board.noY, node->board.last_fall);
+        std::cerr << "Ex4\n";
         childNode->board.actionApply(*action);
+        std::cerr << "Ex5\n";
         childNode->board.legalAction();
+        std::cerr << "Ex6\n";
         childNode->initExpandSet();
+        std::cerr << "Ex7\n";
         node->children.emplace_back(childNode);
+        std::cerr << "Ex8\n";
         node->not_expanded.erase(action);
+        std::cerr << "Ex9n";
         return childNode;
     }
+    std::cerr << "Ex10\n";
     return expand(selectChild(node));
 }
 
