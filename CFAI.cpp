@@ -21,7 +21,7 @@ Node *CFAI::selectChild(Node *node)
     Node *selected;
     for (auto child : node->children)
     {
-        double uct_curr = uctValue(node->visits, child->visits, child->wins);
+        uct_curr = uctValue(node->visits, child->visits, child->wins);
         if (uct_curr > uct)
         {
             uct = uct_curr;
