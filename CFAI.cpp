@@ -28,16 +28,27 @@ Node *CFAI::selectChild(Node *node)
 Node *CFAI::expand(Node *node)
 {
     if (node->board.terminated())
+    {
+        std::cerr << "局面结束，不拓展。\n";
         return node;
+    }
+    std::cerr << "局面未结束，开始拓展。\n";
     for (int y : node->board.legal_action)
     {
         Node *childNode = new Node(node, node->board.M, node->board.N, node->board.board, node->board.top, node->board.lastX,
                                    node->board.lastY, node->board.noX, node->board.noY, node->board.last_fall);
+        std::cerr << "子节点实例化。\n";
         childNode->board.actionApply(y);
+        std::cerr << "子节点更新一步。\n";
         childNode->board.legalAction();
+        std::cerr << "计算子节点可进行的行动。\n";
         node->children.emplace_back(childNode);
+        std::cerr << "将子节点扩展到本节点。\n";
         if (node->children.size() >= node->board.legal_action.size())
+        {
+            std::cerr << "已扩展完毕。\n";
             break;
+        }
     }
     return node->children.back();
 }
