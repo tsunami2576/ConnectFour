@@ -7,7 +7,6 @@
 
 CFAI::CFAI()
 {
-    std::cerr << "AI constructed.\n";
     srand(time(0));
 }
 
@@ -22,7 +21,6 @@ Node *CFAI::selectChild(Node *node)
     Node *selected;
     for (auto child : node->children)
     {
-        std::cerr << "Child status:" << child->board.status << '\n';
         double uct_curr = uctValue(node->visits, child->visits, child->wins);
         if (uct_curr > uct)
         {
@@ -35,32 +33,21 @@ Node *CFAI::selectChild(Node *node)
 
 Node *CFAI::expand(Node *node)
 {
-    std::cerr << "Ex1\n";
     if (node->board.terminated())
         return node;
-    std::cerr << "Ex2\n";
     if (!(node->not_expanded.empty()))
     {
         auto action = node->not_expanded.begin() + (random() % (node->not_expanded.size()));
-        std::cerr << "Ex3\n";
         Node *childNode = new Node(node, node->board.M, node->board.N, node->board.board, node->board.top, node->board.lastX,
                                    node->board.lastY, node->board.noX, node->board.noY, node->board.last_fall);
-        std::cerr << "Ex4\n";
         childNode->board.actionApply(*action);
-        std::cerr << "Ex5\n";
         childNode->board.legalAction();
-        std::cerr << "Ex6\n";
         childNode->initExpandSet();
-        std::cerr << "Ex7\n";
         node->children.emplace_back(childNode);
-        std::cerr << "Ex8\n";
         node->not_expanded.erase(action);
-        std::cerr << "Ex9\n";
         return childNode;
     }
-    std::cerr << "Ex10\n";
     Node *childNode = selectChild(node);
-    std::cerr << "Ex11\n";
     return expand(childNode);
 }
 
@@ -68,7 +55,6 @@ int CFAI::simulate(Board board)
 {
     int cnt = 0;
     int size = board.legal_action.size();
-    std::cerr << "Status: " << board.status << '\n';
     while (!board.terminated())
     {
         std::cerr << ++cnt << ":\n";
@@ -80,7 +66,6 @@ int CFAI::simulate(Board board)
             size--;
         }
     }
-    std::cerr << "Status: " << board.status << '\n';
     return board.status;
 }
 
