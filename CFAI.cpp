@@ -53,7 +53,6 @@ Node *CFAI::expand(Node *node)
 
 int CFAI::simulate(Board board)
 {
-    int cnt = 0;
     int size = board.legal_action.size();
     while (!board.terminated())
     {
@@ -97,12 +96,15 @@ int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _
     root->board.legalAction();
     root->initExpandSet();
     std::cerr << "Time:0\n";
+    int i = 0;
     while ((std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start)).count() < time_limit)
     {
-        std::cerr << "Time:" << (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start)).count() << '\n';
+        if (i % 1000 == 999)
+            std::cerr << "Time:" << (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start)).count() << '\n';
         Node *expanded = expand(root);
         int winner = simulate(expanded->board);
         backpropagate(expanded, winner);
+        i++;
     }
     Node *mostVisited = *(std::max_element(root->children.begin(), root->children.end(), [](Node *a, Node *b)
                                            { return a->wins + 1 / a->visits < b->wins / b->visits; }));
