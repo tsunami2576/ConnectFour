@@ -59,7 +59,7 @@ int CFAI::simulate(Board board)
     {
         auto action = board.legal_action.begin() + random() % board.legal_action.size();
         board.actionApply(*action);
-        if (0 == board.top[*action] || (*action == board.noY && 1 == board.top[*action] && 0 == board.noX))
+        if (0 == board.top[*action])
             board.legal_action.erase(action);
     }
     return board.status;
@@ -89,15 +89,10 @@ void CFAI::backpropagate(Node *node, int winner)
 
 int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _lastY, int _noX, int _noY, double time_limit)
 {
-    std::cerr << "Think start.\n";
     auto start = std::chrono::system_clock::now();
-    std::cerr << "Clock start.\n";
     Node *root = new Node(nullptr, _M, _N, _board, _top, _lastX, _lastY, _noX, _noY, 1);
-    std::cerr << "Root 实例化.\n";
     root->board.legalAction();
     expand(root);
-    std::cerr << "Root expanded.\n";
-    std::cerr << "Simulation start.\n";
     while ((std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start)).count() < time_limit)
     {
         Node *selected = selectChild(root);
@@ -110,7 +105,7 @@ int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _
         std::cerr << "Backpropagate finished.\n";
     }
     Node *mostVisited = *(std::max_element(root->children.begin(), root->children.end(), [](Node *a, Node *b)
-                                           { return a->visits < b->visits; }));
+                                           { return a->wins / a->visits < b->wins / b->visits; }));
     int bestAction = mostVisited->board.lastY;
     delete root;
     return bestAction;
