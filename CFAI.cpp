@@ -96,14 +96,13 @@ int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _
     Node *root = new Node(nullptr, _M, _N, _board, _top, _lastX, _lastY, _noX, _noY, 1);
     root->board.legalAction();
     root->initExpandSet();
+    std::cerr << "Time:0\n";
     while ((std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start)).count() < time_limit)
     {
+        std::cerr << "Time:" << (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start)).count() << '\n';
         Node *expanded = expand(root);
-        std::cerr << "Child expanded. Status:" << expanded->board.status << "\n";
         int winner = simulate(expanded->board);
-        std::cerr << "Simulation finished.\n";
         backpropagate(expanded, winner);
-        std::cerr << "Backpropagate finished.\n";
     }
     Node *mostVisited = *(std::max_element(root->children.begin(), root->children.end(), [](Node *a, Node *b)
                                            { return a->wins + 1 / a->visits < b->wins / b->visits; }));
