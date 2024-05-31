@@ -18,9 +18,8 @@ double CFAI::uctValue(int totle_visits, int visits, int wins, double expPara)
 
 Node *CFAI::selectChild(Node *node)
 {
-    int visits = node->visits;
-    return *(std::max_element(node->children.begin(), node->children.end(), [&visits](Node *a, Node *b)
-                              { return uctValue(visits, a->visits, a->wins) < uctValue(visits, b->visits, b->wins); }));
+    return *(std::max_element(node->children.begin(), node->children.end(), [&node](Node *a, Node *b)
+                              { return uctValue(node->visits, a->visits, a->wins) < uctValue(node->visits, b->visits, b->wins); }));
 }
 
 Node *CFAI::expand(Node *node)
@@ -93,7 +92,7 @@ int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _
     while ((std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start)).count() < time_limit)
     {
         Node *expanded = expand(root);
-        std::cerr << "Child expanded.\n";
+        std::cerr << "Child expanded. Status:" << expanded->board.status << "\n";
         int winner = simulate(expanded->board);
         std::cerr << "Simulation finished.\n";
         backpropagate(expanded, winner);

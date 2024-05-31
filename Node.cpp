@@ -12,6 +12,6 @@ Node::~Node()
 
 void Node::initExpandSet()
 {
-    for (auto action : board.legal_action)
+    for (int action : board.legal_action)
         not_expanded.emplace_back(action);
 }
