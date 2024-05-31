@@ -58,6 +58,7 @@ int CFAI::simulate(Board board)
             size--;
         }
     }
+    std::cerr << "Status: " << board.status << '\n';
     return board.status;
 }
 
