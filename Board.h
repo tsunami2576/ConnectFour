@@ -17,6 +17,7 @@ public:
 
     Board(int **_board, const int *_top, int _M, int _N, int _lastX, int _lastY, int _noX, int _noY, bool _last_fall);
     ~Board();
+    Board(const Board &other);
     bool terminated();
     void legalAction();
     void actionApply(int y);

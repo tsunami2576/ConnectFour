@@ -27,6 +27,21 @@ Board::~Board()
     delete[] top;
 }
 
+Board::Board(const Board &other) : M(other.M), N(other.N), lastX(other.lastX), lastY(other.lastY), noX(other.noX), noY(other.noY), last_fall(other.last_fall)
+{
+    board = new int *[M];
+    top = new int[N];
+    for (int i = 0; i < M; i++)
+    {
+        board[i] = new int[N];
+        for (int j = 0; j < N; j++)
+            board[i][j] = other.board[i][j];
+    }
+
+    for (int i = 0; i < N; i++)
+        top[i] = other.top[i];
+}
+
 bool Board::terminated()
 {
     if (0 == status)
