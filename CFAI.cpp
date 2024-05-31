@@ -94,6 +94,7 @@ int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _
     std::cerr << "Clock start.\n";
     Node *root = new Node(nullptr, _M, _N, _board, _top, _lastX, _lastY, _noX, _noY, 1);
     std::cerr << "Root 实例化.\n";
+    root->board.legalAction();
     expand(root);
     std::cerr << "Root expanded.\n";
     std::cerr << "Simulation start.\n";

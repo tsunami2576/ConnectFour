@@ -39,17 +39,14 @@ void Board::legalAction()
 {
     for (int i = 0; i < N; i++)
     {
-        if (top[i] > 1 || (1 == top[i] && i != noY))
+        if (top[i] != 0)
             legal_action.emplace_back(i);
     }
 }
 
 void Board::actionApply(int y)
 {
-    if (y == noY && top[y] + 1 == noX)
-        top[y] -= 2;
-    else
-        top[y]--;
+    top[y]--;
 
     board[top[y]][y] = (last_fall ? 2 : 1);
     lastX = top[y];
@@ -64,4 +61,7 @@ void Board::actionApply(int y)
         status = 3;
     else
         status = 0;
+
+    if (top[y] != 0 && y == noY && (top[y] - 1) == noX)
+        top[y]--;
 }
