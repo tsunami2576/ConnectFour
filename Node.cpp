@@ -9,3 +9,9 @@ Node::~Node()
     for (Node *child : children)
         delete child;
 }
+
+void Node::initExpandSet()
+{
+    for (auto action : board.legal_action)
+        not_expanded.emplace_back(action);
+}

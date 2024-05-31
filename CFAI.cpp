@@ -27,15 +27,16 @@ Node *CFAI::expand(Node *node)
 {
     if (node->board.terminated())
         return node;
-    if (!(node->board.legal_action.empty()))
+    if (!(node->not_expanded.empty()))
     {
-        auto action = node->board.legal_action.begin() + (random() % (node->board.legal_action.size()));
+        auto action = node->not_expanded.begin() + (random() % (node->board.legal_action.size()));
         Node *childNode = new Node(node, node->board.M, node->board.N, node->board.board, node->board.top, node->board.lastX,
                                    node->board.lastY, node->board.noX, node->board.noY, node->board.last_fall);
         childNode->board.actionApply(*action);
         childNode->board.legalAction();
+        childNode->initExpandSet();
         node->children.emplace_back(childNode);
-        node->board.legal_action.erase(action);
+        node->not_expanded.erase(action);
         return childNode;
     }
     return expand(selectChild(node));
@@ -80,6 +81,7 @@ int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _
     auto start = std::chrono::system_clock::now();
     Node *root = new Node(nullptr, _M, _N, _board, _top, _lastX, _lastY, _noX, _noY, 1);
     root->board.legalAction();
+    root->initExpandSet();
     while ((std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start)).count() < time_limit)
     {
         Node *expanded = expand(root);
