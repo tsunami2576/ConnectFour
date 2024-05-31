@@ -53,7 +53,7 @@ extern "C" Point *getPoint(const int M, const int N, const int *top, const int *
     CFAI ai;
     y = ai.think(M, N, board, top, lastX, lastY, noX, noY);
     x = top[y] - 1;
-    cerr << "Fall: " << x << ' ' << y << endl;
+    cout << "Fall: " << x << ' ' << y << endl;
 
     /*
         不要更改这段代码

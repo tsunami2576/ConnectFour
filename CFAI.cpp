@@ -3,8 +3,13 @@
 #include <cmath>
 #include <ctime>
 #include <chrono>
+#include <iostream>
 
-CFAI::CFAI() { srand(time(0)); }
+CFAI::CFAI()
+{
+    std::cerr << "AI constructed.\n";
+    srand(time(0));
+}
 
 double CFAI::uctValue(int totle_visits, int visits, int wins, double expPara)
 {
@@ -73,15 +78,24 @@ void CFAI::backpropagate(Node *node, int winner)
 
 int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _lastY, int _noX, int _noY, double time_limit)
 {
+    std::cerr << "Think start.\n";
     auto start = std::chrono::system_clock::now();
+    std::cerr << "Clock start.\n";
     Node *root = new Node(nullptr, _M, _N, _board, _top, _lastX, _lastY, _noX, _noY, 1);
+    std::cerr << "Root 实例化.\n";
     expand(root);
+    std::cerr << "Root expanded.\n";
+    std::cerr << "Simulation start.\n";
     while ((std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start)).count() < time_limit)
     {
         Node *selected = selectChild(root);
+        std::cerr << "Child selected.\n";
         Node *expanded = expand(selected);
+        std::cerr << "Child expanded.\n";
         int winner = simulate(expanded->board);
+        std::cerr << "Simulation finished.\n";
         backpropagate(expanded, winner);
+        std::cerr << "Backpropagate finished.\n";
     }
     Node *mostVisited = *(std::max_element(root->children.begin(), root->children.end(), [](Node *a, Node *b)
                                            { return a->visits < b->visits; }));
