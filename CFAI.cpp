@@ -46,6 +46,7 @@ int CFAI::simulate(Board board)
 {
     int cnt = 0;
     int size = board.legal_action.size();
+    std::cerr << "Status: " << board.status << '\n';
     while (!board.terminated())
     {
         std::cerr << ++cnt << ":\n";
