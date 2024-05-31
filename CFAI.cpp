@@ -95,12 +95,8 @@ int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _
     Node *root = new Node(nullptr, _M, _N, _board, _top, _lastX, _lastY, _noX, _noY, 1);
     root->board.legalAction();
     root->initExpandSet();
-    std::cerr << "Time:0\n";
-    int i = 0;
     while ((std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start)).count() < time_limit)
     {
-        if (i % 1000 == 999)
-            std::cerr << "Time:" << (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start)).count() << '\n';
         Node *expanded = expand(root);
         int winner = simulate(expanded->board);
         backpropagate(expanded, winner);
