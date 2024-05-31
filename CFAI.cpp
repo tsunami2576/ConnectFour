@@ -44,11 +44,13 @@ Node *CFAI::expand(Node *node)
         node->children.emplace_back(childNode);
         std::cerr << "Ex8\n";
         node->not_expanded.erase(action);
-        std::cerr << "Ex9n";
+        std::cerr << "Ex9\n";
         return childNode;
     }
     std::cerr << "Ex10\n";
-    return expand(selectChild(node));
+    Node *childNode = selectChild(node);
+    std::cerr << "Ex11\n";
+    return expand(childNode);
 }
 
 int CFAI::simulate(Board board)
