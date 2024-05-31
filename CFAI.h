@@ -10,6 +10,6 @@ private:
     void backpropagate(Node *node, int winner);
 
 public:
-    int think(int _M, int _N, int **_board, const int *_top, int _lastX, int _lastY, int _noX, int _noY, double time_limit = 2500);
+    int think(int _M, int _N, int **_board, const int *_top, int _lastX, int _lastY, int _noX, int _noY, double time_limit = 2400);
     CFAI();
 };
