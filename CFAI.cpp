@@ -18,8 +18,18 @@ double CFAI::uctValue(int totle_visits, int visits, int wins, double expPara)
 
 Node *CFAI::selectChild(Node *node)
 {
-    return *(std::max_element(node->children.begin(), node->children.end(), [&node](Node *a, Node *b)
-                              { return uctValue(node->visits, a->visits, a->wins) < uctValue(node->visits, b->visits, b->wins); }));
+    double uct = 0, uct_curr;
+    Node *selected;
+    for (auto child : node->children)
+    {
+        double uct_curr = uctValue(node->visits, child->visits, child->wins);
+        if (uct_curr > uct)
+        {
+            uct = uct_curr;
+            selected = child;
+        }
+    }
+    return selected;
 }
 
 Node *CFAI::expand(Node *node)
