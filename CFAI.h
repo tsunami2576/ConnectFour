@@ -4,7 +4,7 @@
 class CFAI
 {
 private:
-    static double uctValue(int totle_visits, int visits, int wins, bool role, double expPara = 0.7);
+    static double uctValue(int totle_visits, int visits, int wins, bool role, double expPara = 1.5);
     Node *selectChild(Node *node);
     Node *expand(Node *node);
     int simulate(Board board);
