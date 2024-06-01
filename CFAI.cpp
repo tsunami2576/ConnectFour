@@ -37,7 +37,7 @@ Node *CFAI::expand(Node *node)
         return node;
     if (!(node->not_expanded.empty()))
     {
-        auto action = node->not_expanded.begin() + (random() % (node->not_expanded.size()));
+        auto action = node->not_expanded.begin();
         Node *childNode = new Node(node, node->board.M, node->board.N, node->board.board, node->board.top, node->board.lastX,
                                    node->board.lastY, node->board.noX, node->board.noY, node->board.last_fall);
         childNode->board.legalAction();
