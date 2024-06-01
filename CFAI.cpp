@@ -10,9 +10,9 @@ CFAI::CFAI()
     srand(time(0));
 }
 
-double CFAI::uctValue(int totle_visits, int visits, int wins, double expPara)
+double CFAI::uctValue(int totle_visits, int visits, int wins, bool role, double expPara)
 {
-    return (double(wins) / visits) + expPara * std::sqrt(std::log(double(totle_visits)) / visits);
+    return (double(wins) / visits) * (role ? -1 : 1) + expPara * std::sqrt(std::log(double(totle_visits)) / visits);
 }
 
 Node *CFAI::selectChild(Node *node)
@@ -21,7 +21,7 @@ Node *CFAI::selectChild(Node *node)
     Node *selected;
     for (auto child : node->children)
     {
-        uct_curr = uctValue(node->visits, child->visits, child->wins);
+        uct_curr = uctValue(node->visits, child->visits, child->wins, child->board.last_fall);
         if (uct_curr > uct)
         {
             uct = uct_curr;
@@ -81,15 +81,12 @@ void CFAI::backpropagate(Node *node, int winner)
 
 int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _lastY, int _noX, int _noY, double time_limit)
 {
-    int cnt = 0;
     auto start = std::chrono::system_clock::now();
     Node *root = new Node(nullptr, _M, _N, _board, _top, _lastX, _lastY, _noX, _noY, 1);
     root->board.legalAction();
     root->initExpandSet();
     while ((std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start)).count() < time_limit)
     {
-        if (cnt % 1000 == 0)
-            std::cerr << (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start)).count() << ' ' << time_limit << '\n';
         Node *expanded = expand(root);
         if (expanded->parent == root && expanded->board.status == 1)
         {
@@ -105,7 +102,6 @@ int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _
         }
         int winner = simulate(expanded->board);
         backpropagate(expanded, winner);
-        cnt++;
     }
     double winrate = -2.0, winrate_curr;
     Node *chosen;
