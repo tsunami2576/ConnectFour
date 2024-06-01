@@ -71,10 +71,10 @@ void CFAI::backpropagate(Node *node, int winner)
         {
             node->wins++;
         }
-        // else if (int(node->board.last_fall) + 1 != winner && winner != 3)
-        // {
-        //     node->wins--;
-        // }
+        else if (int(node->board.last_fall) + 1 != winner && winner != 3)
+        {
+            node->wins--;
+        }
         node = node->parent;
     }
 }
@@ -104,7 +104,7 @@ int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _
         int winner = simulate(expanded->board);
         backpropagate(expanded, winner);
     }
-    double winrate = -1.0, winrate_curr;
+    double winrate = -2.0, winrate_curr;
     Node *chosen;
     for (auto child : root->children)
     {
