@@ -40,8 +40,9 @@ Node *CFAI::expand(Node *node)
         auto action = node->not_expanded.begin() + (random() % (node->not_expanded.size()));
         Node *childNode = new Node(node, node->board.M, node->board.N, node->board.board, node->board.top, node->board.lastX,
                                    node->board.lastY, node->board.noX, node->board.noY, node->board.last_fall);
-        childNode->board.actionApply(*action);
+        childNode->board.status = node->board.status;
         childNode->board.legalAction();
+        childNode->board.actionApply(*action);
         childNode->initExpandSet();
         node->children.emplace_back(childNode);
         node->not_expanded.erase(action);
