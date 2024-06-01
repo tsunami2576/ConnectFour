@@ -40,12 +40,13 @@ Node *CFAI::expand(Node *node)
         auto action = node->not_expanded.begin() + (random() % (node->not_expanded.size()));
         Node *childNode = new Node(node, node->board.M, node->board.N, node->board.board, node->board.top, node->board.lastX,
                                    node->board.lastY, node->board.noX, node->board.noY, node->board.last_fall);
-        childNode->board.status = node->board.status;
         childNode->board.legalAction();
         childNode->board.actionApply(*action);
         childNode->initExpandSet();
         node->children.emplace_back(childNode);
         node->not_expanded.erase(action);
+        if (node->parent == nullptr && childNode->board.status == 2)
+            return nullptr;
         return childNode;
     }
     Node *childNode = selectChild(node);
@@ -89,6 +90,14 @@ int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _
     while ((std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start)).count() < time_limit)
     {
         Node *expanded = expand(root);
+        if (expanded == nullptr)
+            continue;
+        if (expanded->parent == root && expanded->board.status == 1)
+        {
+            int chosenY = expanded->board.lastY;
+            delete root;
+            return chosenY;
+        }
         std::cerr << "1";
         int winner = simulate(expanded->board);
         std::cerr << "2";
