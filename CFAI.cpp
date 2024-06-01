@@ -88,7 +88,7 @@ int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _
     root->initExpandSet();
     while ((std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start)).count() < time_limit)
     {
-        if (cnt % 100000 == 0)
+        if (cnt % 1000 == 0)
             std::cerr << (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start)).count() << ' ' << time_limit << '\n';
         Node *expanded = expand(root);
         if (expanded->parent == root && expanded->board.status == 1)
@@ -105,6 +105,7 @@ int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _
         }
         int winner = simulate(expanded->board);
         backpropagate(expanded, winner);
+        cnt++;
     }
     double winrate = -2.0, winrate_curr;
     Node *chosen;
