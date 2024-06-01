@@ -53,17 +53,11 @@ Node *CFAI::expand(Node *node)
 
 int CFAI::simulate(Board board)
 {
-    int size = board.legal_action.size();
     while (!board.terminated())
     {
         auto action = board.legal_action.begin();
-        // auto action = board.legal_action.begin() + random() % size;
+        // auto action = board.legal_action.begin() + random() % board.legal_action.size();
         board.actionApply(*action);
-        if (0 == board.top[*action])
-        {
-            board.legal_action.erase(action);
-            size--;
-        }
     }
     return board.status;
 }
