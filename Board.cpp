@@ -61,7 +61,7 @@ void Board::legalAction()
     }
 }
 
-void Board::actionApply(int y)
+void Board::actionApply(int y, int rd)
 {
     top[y]--;
 
@@ -79,13 +79,5 @@ void Board::actionApply(int y)
     else
         status = 0;
 
-    if (top[y] != 0 && y == noY && (top[y] - 1) == noX)
-        top[y]--;
-    if (top[y] == 0)
-        for (auto it = legal_action.begin(); it != legal_action.end(); it++)
-            if (*it == y)
-            {
-                legal_action.erase(it);
-                break;
-            }
+    legal_action.erase(legal_action.begin() + rd);
 }

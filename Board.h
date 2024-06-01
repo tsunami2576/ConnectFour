@@ -21,5 +21,5 @@ public:
     Board(const Board &other);
     bool terminated();
     void legalAction();
-    void actionApply(int y);
+    void actionApply(int y, int rd);
 };
