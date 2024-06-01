@@ -12,6 +12,7 @@ CFAI::CFAI()
 
 double CFAI::uctValue(int totle_visits, int visits, int wins, bool role, double expPara)
 {
+    std::cerr << double(wins) / visits << ' ' << expPara * std::sqrt(std::log(double(totle_visits)) / visits) << '\n';
     return (double(wins) / visits) * (role ? -1 : 1) + expPara * std::sqrt(std::log(double(totle_visits)) / visits);
 }
 
