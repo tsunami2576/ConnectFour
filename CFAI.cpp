@@ -45,8 +45,6 @@ Node *CFAI::expand(Node *node)
         childNode->initExpandSet();
         node->children.emplace_back(childNode);
         node->not_expanded.erase(action);
-        if (node->parent == nullptr && childNode->board.status == 2)
-            return nullptr;
         return childNode;
     }
     Node *childNode = selectChild(node);
@@ -93,6 +91,12 @@ int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _
         if (expanded == nullptr)
             continue;
         if (expanded->parent == root && expanded->board.status == 1)
+        {
+            int chosenY = expanded->board.lastY;
+            delete root;
+            return chosenY;
+        }
+        else if (expanded->parent != root && expanded->parent == root && expanded->board.status == 2)
         {
             int chosenY = expanded->board.lastY;
             delete root;
