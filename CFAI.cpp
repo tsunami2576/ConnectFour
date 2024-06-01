@@ -38,12 +38,11 @@ Node *CFAI::expand(Node *node)
         return node;
     if (!(node->not_expanded.empty()))
     {
-        int rd = random() % node->not_expanded.size();
-        auto action = node->not_expanded.begin() + rd;
+        auto action = node->not_expanded.begin();
         Node *childNode = new Node(node, node->board.M, node->board.N, node->board.board, node->board.top, node->board.lastX,
                                    node->board.lastY, node->board.noX, node->board.noY, node->board.last_fall);
         childNode->board.legalAction();
-        childNode->board.actionApply(*action, rd);
+        childNode->board.actionApply(*action);
         childNode->initExpandSet();
         node->children.emplace_back(childNode);
         node->not_expanded.erase(action);
@@ -57,10 +56,9 @@ int CFAI::simulate(Board board)
 {
     while (!board.terminated())
     {
-        int rd = random() % board.legal_action.size();
-        auto action = board.legal_action.begin() + rd;
+        auto action = board.legal_action.begin() + random() % board.legal_action.size();
         // auto action = board.legal_action.begin() + random() % board.legal_action.size();
-        board.actionApply(*action, rd);
+        board.actionApply(*action);
     }
     return board.status;
 }
