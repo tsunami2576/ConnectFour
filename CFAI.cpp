@@ -81,12 +81,15 @@ void CFAI::backpropagate(Node *node, int winner)
 
 int CFAI::think(int _M, int _N, int **_board, const int *_top, int _lastX, int _lastY, int _noX, int _noY, double time_limit)
 {
+    int cnt = 0;
     auto start = std::chrono::system_clock::now();
     Node *root = new Node(nullptr, _M, _N, _board, _top, _lastX, _lastY, _noX, _noY, 1);
     root->board.legalAction();
     root->initExpandSet();
     while ((std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start)).count() < time_limit)
     {
+        if (cnt % 1000 == 0)
+            std::cerr << (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - start)).count() << '\n';
         Node *expanded = expand(root);
         if (expanded->parent == root && expanded->board.status == 1)
         {
